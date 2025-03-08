@@ -1,5 +1,5 @@
 using Extensions;
-using UnityEngine;
+using System;
 
 namespace FPS
 {
@@ -7,14 +7,17 @@ namespace FPS
     {
         internal bool playerInputsEnabled = false;
 
+        internal Action<bool> playerInputsUpdated;
+
         internal void SetPlayerInputs(bool enabled)
         {
             playerInputsEnabled = enabled;
+            playerInputsUpdated?.Invoke(enabled);
         }
 
         internal void SetAllInputs(bool enabled)
         {
-            playerInputsEnabled = enabled;
+            SetPlayerInputs(enabled);
         }
     }
 }
