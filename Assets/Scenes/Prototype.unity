@@ -891,6 +891,7 @@ GameObject:
   - component: {fileID: 1306591022}
   - component: {fileID: 1306591024}
   - component: {fileID: 1306591023}
+  - component: {fileID: 1306591026}
   - component: {fileID: 1306591025}
   m_Layer: 0
   m_Name: Player
@@ -985,6 +986,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1306591026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306591021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8411613aebd064abcab3010bfa08aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactionDetectionPoint: {fileID: 330585546}
+  _cameraViewValidationRadius: 0.2
+  _cameraViewValidationDistance: 2.5
+  _minPalyerDistanceForInteraction: 0.55
+  _interactionLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _drawInteractionDetectionGizmos: 1
+  _spehereCastResolution: 7
 --- !u!1 &1370303424
 GameObject:
   m_ObjectHideFlags: 0

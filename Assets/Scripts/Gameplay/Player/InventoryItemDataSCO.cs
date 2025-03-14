@@ -22,6 +22,8 @@ namespace FPS
 
         public string itemName;
         public string itemDescription;
+
+        public Sprite itemIcon;
         //add fields as needed
     }
 }

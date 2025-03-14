@@ -13,7 +13,9 @@ namespace FPS
         [SerializeField] private Transform _playerCameraTransform;
         [SerializeField] private Transform _playerStandingCameraPoint, _playerCrouchingCameraPoint;
         [SerializeField] private float _cameraTransitionTime = 1.5f;
+
         internal Tween cameraTransitionTween;
+        internal Transform CameraTransform => _playerCameraTransform;
 
         [Header("Player Components")]
         [SerializeField] private GameObject _standingColliderObj;

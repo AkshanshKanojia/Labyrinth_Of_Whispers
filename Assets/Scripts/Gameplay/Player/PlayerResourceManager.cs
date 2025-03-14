@@ -78,7 +78,7 @@ namespace FPS
             return resource != null && resource.AmountOwned >= amount;
         }
 
-        internal void RemoveResource(PlayerResourceType resourceType, int amount)
+        internal bool RemoveResource(PlayerResourceType resourceType, int amount)
         {
             PlayerResource resource = _playerResourceData.Resources.FirstOrDefault(x => x.ResourceType == resourceType);
 
@@ -86,9 +86,10 @@ namespace FPS
             if (canRemove)
             {
                 resource.AmountOwned -= amount;
+                SavePlayerResources();
             }
 
-            SavePlayerResources();
+            return canRemove;
         }
         #endregion
     }
