@@ -15,6 +15,8 @@ namespace FPS
 
         private InventoryItemDataSCO _inventoryItemData;
 
+        private const string INVETORY_DATA_PATH = "InventoryData";
+
         #region Initialization
 
         private void Start()
