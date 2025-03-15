@@ -2,15 +2,12 @@ using Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace FPS
 {
     public class PlayerResourceManager : Singleton<PlayerResourceManager>
     {
         private PlayerResourceData _playerResourceData;
-
-        private const string KEY_RESOURCES = "PlayerResources";
 
         #region Initialization
         private void Start()
@@ -28,14 +25,9 @@ namespace FPS
         #region Resource Methods
         internal void LoadPlayerResources()
         {
-            string playerResourceData = PlayerPrefs.GetString(KEY_RESOURCES);
-            if (!string.IsNullOrEmpty(playerResourceData))
-            {
-                PlayerResourceData playerResourceSaveData = JsonUtility.FromJson<PlayerResourceData>(playerResourceData);
+            _playerResourceData = SaveManager.GetResourceData();
 
-                _playerResourceData = playerResourceSaveData;
-            }
-            else
+            if (_playerResourceData == null)
             {
                 //generate default resources
                 _playerResourceData = new PlayerResourceData
@@ -52,8 +44,7 @@ namespace FPS
 
         internal void SavePlayerResources()
         {
-            string playerResourceData = JsonUtility.ToJson(_playerResourceData);
-            PlayerPrefs.SetString(KEY_RESOURCES, playerResourceData);
+            SaveManager.SetResourceData(_playerResourceData);
         }
 
         internal void AddResource(PlayerResourceType resourceType, int amount)

@@ -50,6 +50,7 @@ namespace FPS
                         return false;
                     }
 
+                    //only interact if object is visible to player and within interaction range
                     activeInteractableItem = interactable;
                     activeInteractableItem.OnInteractionBegin();
                     isInteractingWithObject = true;

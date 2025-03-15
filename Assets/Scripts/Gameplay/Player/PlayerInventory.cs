@@ -13,9 +13,6 @@ namespace FPS
 
         internal InventoryData activeInventoryData;
 
-        private const string KEY_INVENTORY = "Inventory";
-        private const string INVETORY_DATA_PATH = "InventoryData";
-
         private InventoryItemDataSCO _inventoryItemData;
 
         #region Initialization
@@ -41,28 +38,19 @@ namespace FPS
 
         internal void SaveInventory()
         {
-            string inventoryData = JsonUtility.ToJson(activeInventoryData);
-            PlayerPrefs.SetString(KEY_INVENTORY, inventoryData);
+            SaveManager.SetInventoryData(activeInventoryData);
         }
 
         internal void LoadInventory()
         {
-            string inventoryData = PlayerPrefs.GetString(KEY_INVENTORY);
+            activeInventoryData = SaveManager.GetInventoryData();
 
-            if (!string.IsNullOrEmpty(inventoryData))
+            //generate default inventory if not saved
+            activeInventoryData ??= new InventoryData
             {
-                InventoryData inventorySaveData = JsonUtility.FromJson<InventoryData>(inventoryData);
-                activeInventoryData = inventorySaveData;
-            }
-            else
-            {
-                //generate default inventory
-                activeInventoryData = new InventoryData
-                {
-                    currentInventorySize = _defaultInventorySize,
-                    itemsInInventory = new List<InventoryItem>()
-                };
-            }
+                currentInventorySize = _defaultInventorySize,
+                itemsInInventory = new List<InventoryItem>()
+            };
         }
 
         internal bool CheckInventorySpace(InventoryItemType itemType, int amountToAdd)
@@ -216,11 +204,11 @@ namespace FPS
     public enum InventoryItemType
     {
         //add items as per game requirements
-        
+
         //weapons/ammos
         PistolAmmo,
         Pistol,
-       
+
         //crafting items
         Syringe,
         NailBomb,
