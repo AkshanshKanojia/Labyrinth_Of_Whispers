@@ -15,6 +15,8 @@ namespace FPS
 
         public static string ActiveSaveID { get; private set; }
         public static SaveDataContent LoadedData { get; private set; } = new SaveDataContent();
+        public static SaveData AvailableSaves { get => _availableSaves; }
+
         private static SaveData _availableSaves = new SaveData();
 
         public static bool SaveInitialized = false;
