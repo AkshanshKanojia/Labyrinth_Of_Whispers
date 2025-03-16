@@ -963,9 +963,9 @@ RectTransform:
   - {fileID: 1059529731}
   m_Father: {fileID: 1448719030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 244.46573, y: -34.2376}
   m_SizeDelta: {x: 143.44, y: 41.7187}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &742683197
@@ -1310,7 +1310,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &949117829
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1757,9 +1757,9 @@ RectTransform:
   - {fileID: 984321436}
   m_Father: {fileID: 1448719030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 412.90573, y: -34.2376}
   m_SizeDelta: {x: 143.44, y: 41.7187}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1117145837
@@ -1888,6 +1888,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d32d77ca5e888f4fba3d59c8469a250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defaultInventorySize: 6
+  _maxInventorySize: 16
+  _inventoryUI: {fileID: 949117828}
+  _inventorySlotParent: {fileID: 1782200035}
+  _inventorySlotPrefab: {fileID: -6747096094449614061, guid: 75a59dc63dc843c40a399f43e050d6e0,
+    type: 3}
 --- !u!1 &1306591021
 GameObject:
   m_ObjectHideFlags: 0

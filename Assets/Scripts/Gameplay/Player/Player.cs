@@ -23,9 +23,13 @@ namespace FPS
 
         private PlayerInputHandler _playerInputHandler;
         private Rigidbody _playerRB;
+        private PlayerInventory _playerInventory;
 
         private Vector2 _mouseLookAngle;
         private Vector2 _currentMovementInput;
+
+        internal bool movementEnabled = true;
+        internal bool lookEnabled = true;
 
         #region Initialization and Default Methods
 
@@ -33,7 +37,7 @@ namespace FPS
         {
             //todo: change initalization calls via level/game manager once testing is done
             Initialize();
-            InputManager.Instance.SetPlayerInputs(true);
+            SetAllInputsEnabled(true);
         }
 
         internal void Initialize()
@@ -50,6 +54,7 @@ namespace FPS
         {
             _playerInputHandler = GetComponent<PlayerInputHandler>();
             _playerRB = GetComponent<Rigidbody>();
+            _playerInventory = PlayerInventory.Instance;
 
             _playerInputHandler.Initialize();
             playerMoventData.Initialize();
@@ -81,6 +86,11 @@ namespace FPS
         #endregion
 
         #region Camera Transition and Look Methods
+
+        internal void SetLookEnabled(bool enabled)
+        {
+            lookEnabled = enabled;
+        }
         private void SetCameraCrouchPos(bool crouched)
         {
             cameraTransitionTween?.Kill();
@@ -92,6 +102,11 @@ namespace FPS
 
         private void UpdateMouseLookAngle(Vector2 value)
         {
+            if (!lookEnabled)
+            {
+                return;
+            }
+
             value *= 0.05f * playerMoventData.LookSensitivity;//note: 0.05f is a multiplier to reduce the sensitivity of the mouse movement, can be exposed if needed but would be constant in most cases
 
             _mouseLookAngle.x += value.x;
@@ -105,6 +120,16 @@ namespace FPS
         #endregion
 
         #region Input Handling
+        internal void SetMoveAndLook(bool enabled)
+        {
+            SetPlayerMovementEnabled(enabled);
+            SetLookEnabled(enabled);
+        }
+
+        internal void SetAllInputsEnabled(bool enabled)
+        {
+            InputManager.Instance.SetPlayerInputs(enabled);
+        }
 
         private void PlayerInputUpdated(bool enabled)
         {
@@ -172,12 +197,31 @@ namespace FPS
                         break;
                 }
             }
+
+            //inventory action
+            if (action == AvailablePlayerActions.Inventory)
+            {
+                switch (ctx.phase)
+                {
+                    case InputActionPhase.Performed:
+                        _playerInventory.ToggleInventory();
+                        SetMoveAndLook(!_playerInventory.isInventoryOpen);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
 
         #endregion
 
         #region Player Movement
+
+        internal void SetPlayerMovementEnabled(bool enabled)
+        {
+            movementEnabled = enabled;
+        }
 
         internal void SetCrouchState(bool crouched)
         {
@@ -224,7 +268,7 @@ namespace FPS
 
         private void CheckForPlayerMovement()
         {
-            if (_currentMovementInput == Vector2.zero)
+            if (_currentMovementInput == Vector2.zero || !movementEnabled)
             {
                 return;
             }
@@ -304,7 +348,7 @@ namespace FPS
             internal void SetSprinting(bool sprint)
             {
                 isSprinting = sprint;
-                if(isSprinting)
+                if (isSprinting)
                 {
                     isCrouching = false;
                 }

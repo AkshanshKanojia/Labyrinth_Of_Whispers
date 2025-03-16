@@ -9,12 +9,19 @@ namespace FPS
     public class PlayerInventory : Singleton<PlayerInventory>
     {
         [Header("Inventory Data")]
-        private int _defaultInventorySize = 6;
+        [SerializeField] private int _defaultInventorySize = 6;
+        [SerializeField] private int _maxInventorySize = 16;
 
+        [Header("UI Data")]
+        [SerializeField] private GameObject _inventoryUI;
+        [SerializeField] private Transform _inventorySlotParent;
+        [SerializeField] private InventorySlot _inventorySlotPrefab;
+
+        internal bool isInventoryOpen = false;
+        internal List<InventorySlot> inventorySlots = new List<InventorySlot>();
         internal InventoryData activeInventoryData;
 
         private InventoryItemDataSCO _inventoryItemData;
-
         private const string INVETORY_DATA_PATH = "InventoryData";
 
         #region Initialization
@@ -27,11 +34,55 @@ namespace FPS
         {
             LoadInventoryItemData();
             LoadInventory();//load default inventory if any
+
+            InitalizeInventorySlots(); //generate default inventory slots
+
+            SetInventorySize(activeInventoryData.currentInventorySize);//generate active sized inventory
+
+        }
+
+        private void InitalizeInventorySlots()
+        {
+            for (int i = 0; i < _maxInventorySize; i++)
+            {
+                InventorySlot tempSlot = Instantiate(_inventorySlotPrefab, _inventorySlotParent);
+                tempSlot.Initialize(i);
+                tempSlot.SetSlotActive(i < activeInventoryData.currentInventorySize);
+
+                inventorySlots.Add(tempSlot);
+            }
         }
 
         private void LoadInventoryItemData()
         {
             _inventoryItemData = Resources.Load<InventoryItemDataSCO>(INVETORY_DATA_PATH);
+        }
+
+        #endregion
+
+        #region UI Interactions
+
+        internal void SetInventorySize(int size)
+        {
+            activeInventoryData.currentInventorySize = size;
+
+            for (int i = 0; i < _maxInventorySize; i++)
+            {
+                inventorySlots[i].SetSlotActive(i < size);
+            }
+
+            SaveInventory();
+        }
+        internal void ToggleInventory()
+        {
+            SetInvntoryOpen(!isInventoryOpen);
+        }
+
+        internal void SetInvntoryOpen(bool open)
+        {
+            GameManager.Instance.SetMouseVisible(open);
+            isInventoryOpen = open;
+            _inventoryUI.SetActive(open);
         }
 
         #endregion
