@@ -24,12 +24,22 @@ namespace FPS
         private PlayerInputHandler _playerInputHandler;
         private Rigidbody _playerRB;
         private PlayerInventory _playerInventory;
+        private Animator _playerAnimator;
 
         private Vector2 _mouseLookAngle;
         private Vector2 _currentMovementInput;
 
         internal bool movementEnabled = true;
+        internal bool canUpdateAnimationParameters = true;
         internal bool lookEnabled = true;
+
+        #region Constants and animation variables
+        private const string _walkAnimationId = "IsWalking";
+        private const string _crouchAnimationId = "IsCrouching";
+
+        private Vector2 _animationUpdateMovementVector;
+        private bool _animationUpdateCrouchState;
+        #endregion
 
         #region Initialization and Default Methods
 
@@ -55,6 +65,7 @@ namespace FPS
             _playerInputHandler = GetComponent<PlayerInputHandler>();
             _playerRB = GetComponent<Rigidbody>();
             _playerInventory = PlayerInventory.Instance;
+            _playerAnimator = GetComponentInChildren<Animator>();
 
             _playerInputHandler.Initialize();
             playerMoventData.Initialize();
@@ -71,6 +82,11 @@ namespace FPS
         {
             InputManager.Instance.playerInputsUpdated -= PlayerInputUpdated;
             _playerInputHandler.OnInputUpdated -= CheckForInput;
+        }
+
+        private void Update()
+        {
+            UpdateAnimationParameters();
         }
 
         private void FixedUpdate()
@@ -116,6 +132,32 @@ namespace FPS
 
             transform.eulerAngles = new Vector3(0, _mouseLookAngle.x, 0);
             _playerCameraTransform.localEulerAngles = new Vector3(_mouseLookAngle.y, 0, 0);
+        }
+        #endregion
+
+        #region Animation Methods
+
+        internal void SetAnimationUpdateChecks(bool canUpdate)
+        {
+            canUpdateAnimationParameters = canUpdate;
+        }
+        private void UpdateAnimationParameters()
+        {
+            if (_playerAnimator && canUpdateAnimationParameters)
+            {
+                //added parameters check to avoid extra calling of animatior methodsz
+                if (_animationUpdateMovementVector != _currentMovementInput)
+                {
+                    _playerAnimator.SetBool(_walkAnimationId, _currentMovementInput != Vector2.zero);
+                    _animationUpdateMovementVector = _currentMovementInput;
+                }
+
+                if (_animationUpdateCrouchState != playerMoventData.isCrouching)
+                {
+                    _animationUpdateCrouchState = playerMoventData.isCrouching;
+                    _playerAnimator.SetBool(_crouchAnimationId, playerMoventData.isCrouching);
+                }
+            }
         }
         #endregion
 
