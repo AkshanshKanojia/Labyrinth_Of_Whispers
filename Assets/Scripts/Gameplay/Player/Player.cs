@@ -11,10 +11,12 @@ namespace FPS
 
         [Header("Camera Properties")]
         [SerializeField] private Transform _playerCameraTransform;
+        [SerializeField] private Transform _playerBodyVisual;
         [SerializeField] private Transform _playerStandingCameraPoint, _playerCrouchingCameraPoint;
+        [SerializeField] private Transform _playerBodyStandingPoint, _playerBodyCrouchingPoint;
         [SerializeField] private float _cameraTransitionTime = 1.5f;
 
-        internal Tween cameraTransitionTween;
+        internal Tween cameraTransitionTween, playerBodyCrouchTween;
         internal Transform CameraTransform => _playerCameraTransform;
 
         [Header("Player Components")]
@@ -110,10 +112,13 @@ namespace FPS
         private void SetCameraCrouchPos(bool crouched)
         {
             cameraTransitionTween?.Kill();
+            playerBodyCrouchTween?.Kill();
 
             Vector3 targetPos = crouched ? _playerCrouchingCameraPoint.localPosition : _playerStandingCameraPoint.localPosition;
+            Vector3 targetBodyPos = crouched ? _playerBodyCrouchingPoint.localPosition : _playerBodyStandingPoint.localPosition;
 
             cameraTransitionTween = _playerCameraTransform.DOLocalMove(targetPos, _cameraTransitionTime).SetEase(Ease.OutQuad);
+            playerBodyCrouchTween = _playerBodyVisual.DOLocalMove(targetBodyPos, _cameraTransitionTime).SetEase(Ease.OutQuad);
         }
 
         private void UpdateMouseLookAngle(Vector2 value)
